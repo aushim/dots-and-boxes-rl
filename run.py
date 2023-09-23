@@ -2,7 +2,7 @@ import gymnasium as gym
 from gym.envs.registration import register
 import time
 
-from env import DotsAndBoxesEnv
+from environments import DotsAndBoxesEnv
 
 register(
    id='DotsAndBoxes-v0',
