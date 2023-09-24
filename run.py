@@ -1,6 +1,4 @@
-import gymnasium as gym
 from gym.envs.registration import register
-import time
 
 from environments import DotsAndBoxesEnv
 
@@ -11,18 +9,24 @@ register(
 )
 
 env = DotsAndBoxesEnv(render_mode='human')
-observation, info = env.reset(seed=42)
+num_episodes = 0
+max_episodes = 3
+env.reset(seed=42)
 
-for _ in range(500):
-   env.render()
+for agent in env.agent_iter():
 
-   # Add a wait time to slow down the rendering
-   time.sleep(1)
+   if num_episodes >= max_episodes:
+      break
 
-   action = env.action_space.sample()  # this is where you would insert your policy
-   observation, reward, terminated, truncated, info = env.step(action)
+   observation, reward, termination, truncation, info = env.last()
 
-   if terminated or truncated:
-      observation, info = env.reset()
+   if termination or truncation:
+      env.reset()
+      num_episodes += 1
+   else:
+      # this is where you would insert your policy
+      mask = observation["action_mask"]
+      action = env.action_space(agent).sample(mask)
+      env.step(action)
 
 env.close()

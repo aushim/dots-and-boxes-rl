@@ -1,2 +1,1 @@
-from environments.grid_world import GridWorldEnv
-from environments.dots_and_boxes import DotsAndBoxesEnv
+from environments.dots_and_boxes import env as DotsAndBoxesEnv

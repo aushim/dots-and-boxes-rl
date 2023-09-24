@@ -7,3 +7,5 @@ box2d-py
 box2d
 box2d-kengz
 pygame
+stable-baselines3[extra]
+pettingzoo[all]
