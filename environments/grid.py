@@ -8,15 +8,14 @@ class Grid:
         self.vertical_edges = rows * (columns + 1)
         self.num_edges = self.horizontal_edges + self.vertical_edges
         self._grid = np.zeros((rows, columns), dtype=np.uint8)
-
-    def _get_cells_from_action(self, action):
         self._action_to_cells = {x: [[int(x/self.columns) - 1, x%self.columns], [int(x/self.columns), x%self.columns]] for x in range(self.num_edges) if x < self.horizontal_edges}
         self._action_to_cells.update({x: [[int((x - self.horizontal_edges)/(self.columns + 1)), (x - self.horizontal_edges)%(self.columns + 1) - 1], [int((x - self.horizontal_edges)/(self.columns + 1)), (x - self.horizontal_edges)%(self.columns + 1)]] for x in range(self.num_edges) if x >= self.horizontal_edges})
 
+    def _get_cells_from_action(self, action):
         return self._action_to_cells[action] if action < self.num_edges else None
     
     def _get_cell_and_edge_type_from_action(self, action):
-        if action < self.num_edges:
+        if action is not None and action < self.num_edges:
             cells = self._get_cells_from_action(action)
             if action < self.horizontal_edges:
                 if self._check_cell_in_bounds(cells[0]):
@@ -33,6 +32,9 @@ class Grid:
 
     def _is_action_valid(self, action):
         cell, edge_type = self._get_cell_and_edge_type_from_action(action)
+
+        if cell is None or edge_type is None:
+            return False
 
         return not self._check_edge_already_closed(cell, edge_type)
 
@@ -85,7 +87,7 @@ class Grid:
     
     def _apply_action(self, action):
         edge_type = 'horizontal' if action < self.horizontal_edges else 'vertical'
-        [first_cell, second_cell] = self._action_to_cells[action]
+        [first_cell, second_cell] = self._get_cells_from_action(action)
         action_valid = True
         
         first_cell_closed_after_action = False

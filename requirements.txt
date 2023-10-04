@@ -9,3 +9,4 @@ box2d-kengz
 pygame
 stable-baselines3[extra]
 pettingzoo[all]
+sb3-contrib
