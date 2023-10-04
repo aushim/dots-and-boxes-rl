@@ -49,12 +49,11 @@ def test_run(
                              columns=NUM_COLUMNS,
                              num_agents=NUM_AGENTS,
                              )
-    env.reset(seed=SEED)
     print('Testing agent vs {}'.format(
         'trained opponent' if use_trained_opponent else 'random opponent'))
     print('============================================')
     for episode in range(num_episodes):
-        obs, _ = env.reset()
+        obs, _ = env.reset(seed=episode)
         done = False
         score = 0
         while not done:
